@@ -26,6 +26,10 @@
                 <input type="tel" id="telefone" required>
             </div>
             <div>
+                <label for="dataNascimento">Data de Nascimento:</label>
+                <input type="date" id="dataNascimento" required>
+            </div>
+            <div>
                 <label for="senha">Senha:</label>
                 <input type="password" id="senha" required>
             </div>
@@ -48,6 +52,7 @@
                     <th>Nome</th>
                     <th>E-mail</th>
                     <th>Telefone</th>
+                    <th>Data de Nascimento</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -55,6 +60,17 @@
                 <!-- Os dados da API serão injetados aqui via JS -->
             </tbody>
         </table>
+    </section>
+
+    <hr>
+
+    <!-- Seção de Tarefas do Usuário -->
+    <section id="secao-tarefas" style="display: none;">
+        <h2>Tarefas do Usuário: <span id="nome-usuario-tarefas"></span></h2>
+        <button id="btn-voltar">Voltar à Lista</button>
+        <ul id="lista-tarefas" style="margin-top: 10px;">
+            <!-- As tarefas serão injetadas aqui via JS -->
+        </ul>
     </section>
 
     <script src="js/usuarios.js"></script>
