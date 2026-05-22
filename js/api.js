@@ -1,4 +1,4 @@
-const API_BASE = 'https://projeto-senac-back.vercel.app/';
+const API_BASE = 'https://projeto-senac-back.vercel.app';
 const TOKEN_KEY = 'acesso-carlos';
 
 function getToken() {
