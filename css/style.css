@@ -127,7 +127,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: rgb(96, 149, 172);
     font-size: 18px;
     flex-shrink: 0;
 }
@@ -190,7 +190,7 @@ body {
    PAGE HERO (substitui o <header> antigo)
    ============================================================ */
 .page-hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #818cf8 100%);
+    background: linear-gradient(135deg, var(--color-primary) 0%, #1F4E5F 100%);
     color: white;
     padding: var(--space-12) var(--space-4);
     text-align: center;
@@ -277,13 +277,13 @@ body {
 /* card de instrução sutil */
 .card.info-card {
     background: var(--color-primary-light);
-    border-color: #c7d2fe;
+    border-color: #F5F7FA;
     box-shadow: none;
     padding: var(--space-5) var(--space-6);
 }
 
 .card.info-card p {
-    color: #3730a3;
+    color: #1F4E5F;
     font-size: var(--font-size-sm);
     line-height: 1.6;
 }
@@ -317,7 +317,7 @@ body {
 
 .form-field input:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 0 3px #F5F7FA(99, 102, 241, 0.15);
     background: white;
 }
 
@@ -411,7 +411,7 @@ button:hover,
 button[type="submit"]:hover,
 a.button:hover {
     background: var(--color-primary-dark);
-    box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+    box-shadow: 0 4px 12px rg#F5F7FAba(99,102,241,0.3);
     transform: translateY(-1px);
 }
 
@@ -450,7 +450,7 @@ button.danger {
 
 button.danger:hover {
     background: var(--color-danger-dark);
-    box-shadow: 0 4px 12px rgba(239,68,68,0.3);
+    box-shadow: 0 4px 12px rg#c63639ba(239,68,68,0.3);
 }
 
 button.small {
@@ -589,14 +589,14 @@ button.small {
 /* ============================================================
    TAREFAS — cards em grid
    ============================================================ */
-.tarefas-grid {
+.produtos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: var(--space-4);
     margin-top: var(--space-4);
 }
 
-.tarefa-card {
+.produto-card {
     background: var(--color-surface);
     border: 1.5px solid var(--color-border);
     border-radius: var(--radius-lg);
@@ -839,7 +839,7 @@ table tbody tr:hover { background: #fafafa; }
     border-color: var(--color-primary);
 }
 
-.task-form-simple {
+.prazu-form-simple {
     display: grid;
     grid-template-columns: 1fr 220px auto;
     gap: var(--space-3);
@@ -847,7 +847,7 @@ table tbody tr:hover { background: #fafafa; }
     margin-bottom: var(--space-4);
 }
 
-.task-form-simple select {
+.prazu-form-simple select {
     width: 100%;
     padding: 10px var(--space-3);
     border: 1px solid var(--color-border);
@@ -856,9 +856,9 @@ table tbody tr:hover { background: #fafafa; }
     background: #fff;
 }
 
-.task-form-modal textarea,
-.task-form-modal select,
-.task-form-modal input {
+.prazu-form-modal textarea,
+.prazu-form-modal select,
+.prazu-form-modal input {
     width: 100%;
     padding: 10px var(--space-3);
     border: 1px solid var(--color-border);
@@ -980,17 +980,17 @@ table tbody tr:hover { background: #fafafa; }
     flex: 0 0 auto;
 }
 
-.task-card {
+.prazu-card {
     border: 1px solid rgba(15, 23, 42, 0.08);
     border-radius: var(--radius-lg);
 }
 
-.task-card.done {
+.prazu-card.done {
     border-color: rgba(34, 197, 94, 0.35);
     background: linear-gradient(180deg, rgba(34, 197, 94, 0.08), rgba(255, 255, 255, 1));
 }
 
-.task-title.done {
+.prazu-title.done {
     text-decoration: line-through;
     color: var(--color-text-muted);
 }
@@ -1020,7 +1020,7 @@ table tbody tr:hover { background: #fafafa; }
     border-left-color: var(--color-success);
 }
 
-.kanban-card .task-title {
+.kanban-card .prazu-title {
     color: var(--color-text);
 }
 
@@ -1069,7 +1069,7 @@ table tbody tr:hover { background: #fafafa; }
 .form-control:focus,
 .form-select:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 0.25rem rgba(99, 102, 241, 0.15);
+    box-shadow: 0 0 0 0.25rem rg#F5F7FAba(99, 102, 241, 0.15);
 }
 
 /* ============================================================
@@ -1094,8 +1094,8 @@ footer {
     .page-hero h1 { font-size: var(--font-size-2xl); }
     .card { padding: var(--space-5); }
     .form-inline { flex-direction: column; align-items: stretch; }
-    .tarefas-grid { grid-template-columns: 1fr; }
-    .task-form-simple { grid-template-columns: 1fr; }
+    .produtos-grid { grid-template-columns: 1fr; }
+    .prazu-form-simple { grid-template-columns: 1fr; }
     .kanban-board { grid-template-columns: 1fr; }
 }
 
