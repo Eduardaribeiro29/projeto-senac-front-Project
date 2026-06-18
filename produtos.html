@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minhas Tarefas</title>
+    <title>Meus Produtos</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,11 +16,11 @@
     <nav class="topbar">
         <div class="topbar-inner">
             <a class="topbar-brand" href="index.html">
-                <span class="brand-name">Task<span>Flow</span></span>
+                <span class="brand-name">Prazu<span>Oficial/span></span>
             </a>
             <div class="topbar-nav">
                 <a class="nav-link" href="index.html">Início</a>
-                <a class="nav-link active" href="tarefas.html">Tarefas</a>
+                <a class="nav-link active" href="produtos.html">Produtos</a>
                 <a class="nav-link" href="perfil.html">Perfil</a>
             </div>
             <div class="topbar-actions">
@@ -33,10 +33,10 @@
         <section class="card app-card">
             <div class="card-header app-header">
                 <div>
-                    <h2 class="app-subtitle">Gestão de tarefas</h2>
+                    <h2 class="app-subtitle">Gestão de produtos</h2>
                     <p class="app-muted">Use visualização solta, kanban ou tabela.</p>
                 </div>
-                <button id="btn-nova-tarefa" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tarefaModal">Nova tarefa</button>
+                <button id="btn-novo-produto" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tarefaModal">Novo produto</button>
             </div>
 
             <div class="view-switch-simple" role="tablist" aria-label="Modo de visualização">
@@ -48,44 +48,46 @@
             <div id="resultado"></div>
         </section>
 
-        <section id="tarefas-cards-wrapper">
-            <div id="lista-tarefas-cards" class="tarefas-grid"></div>
+        <section id="produtos-cards-wrapper">
+            <div id="lista-produtos-cards" class="produtos-grid"></div>
         </section>
 
-        <section id="tarefas-kanban-wrapper" class="is-hidden">
+        <section id="produtos-kanban-wrapper" class="is-hidden">
             <div class="kanban-board">
                 <div class="kanban-column" data-status="novo">
                     <h3>Novo</h3>
                     <div id="kanban-novo" class="kanban-list"></div>
                 </div>
-                <div class="kanban-column" data-status="andamento">
-                    <h3>Em andamento</h3>
-                    <div id="kanban-andamento" class="kanban-list"></div>
+                <div class="kanban-column" data-status="dentro-validade">
+                    <h3>Dentro da Validade</h3>
+                    <div id="kanban-dentro-validade" class="kanban-list"></div>
                 </div>
-                <div class="kanban-column" data-status="concluida">
-                    <h3>Concluída</h3>
-                    <div id="kanban-concluida" class="kanban-list"></div>
+                <div class="kanban-column" data-status="vencido">
+                    <h3>Vencido</h3>
+                    <div id="kanban-vencido" class="kanban-list"></div>
                 </div>
             </div>
         </section>
 
-        <section id="tarefas-tabela-wrapper" class="table-wrapper is-hidden">
+        <section id="produtos-tabela-wrapper" class="table-wrapper is-hidden">
             <table>
                 <thead>
                     <tr>
                         <th>#ID</th>
                         <th>Título</th>
                         <th>Descrição</th>
+                        <th>Data de Validade</th>
+                        <th>Data de Fabricação</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody id="lista-tarefas-tabela"></tbody>
+                <tbody id="lista-produtos-tabela"></tbody>
             </table>
         </section>
     </div>
 
-    <footer>TaskFlow · Node.js + Express + SQLite</footer>
+    <footer>Prazu- Controle de Validade</footer>
 
     <div class="modal fade" id="tarefaModal" tabindex="-1" aria-labelledby="tarefaModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
