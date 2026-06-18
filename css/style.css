@@ -3,26 +3,26 @@
    ============================================================ */
 :root {
     /* Cores primárias (cinza, azul, verde) */
-    --color-primary:        #2563eb;
+    --color-primary:        #1F4E5F;
     --color-primary-dark:   #1d4ed8;
     --color-primary-light:  #dbeafe;
 
     /* Cores de superfície */
-    --color-bg:             #f3f4f6;
+    --color-bg:             #F5F7FA;
     --color-surface:        #ffffff;
     --color-surface-alt:    #f8fafc;
-    --color-border:         #e2e8f0;
+    --color-border:         #8A8F98;
 
     /* Cores de texto */
     --color-text:           #0f172a;
     --color-text-muted:     #64748b;
 
     /* Feedback */
-    --color-success:        #15803d;
+    --color-success:        #34C759;
     --color-success-bg:     #dcfce7;
-    --color-error:          #dc2626;
+    --color-error:          #FF4D4F;
     --color-error-bg:       #fee2e2;
-    --color-warning:        #d97706;
+    --color-warning:        #FF9500;
     --color-warning-bg:     #fef3c7;
 
     /* Ações destrutivas / neutras */
