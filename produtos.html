@@ -78,6 +78,7 @@
                         <th>Descrição</th>
                         <th>Data de Validade</th>
                         <th>Data de Fabricação</th>
+                        <th>Quantidade</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -89,30 +90,30 @@
 
     <footer>Prazu- Controle de Validade</footer>
 
-    <div class="modal fade" id="tarefaModal" tabindex="-1" aria-labelledby="tarefaModalTitle" aria-hidden="true">
+    <div class="modal fade" id="produtoModal" tabindex="-1" aria-labelledby="produtoModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <form id="form-tarefa" class="task-form-modal">
+                <form id="form-produto" class="prazu-form-modal">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="tarefaModalTitle">Nova tarefa</h5>
+                        <h5 class="modal-title" id="produtoModalTitle">Novo produto</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        <input type="hidden" id="tarefa-id">
+                        <input type="hidden" id="produto-id">
                         <div class="form-field">
-                            <label for="tarefa-titulo">Título</label>
-                            <input type="text" id="tarefa-titulo" placeholder="Ex: Revisar layout" required>
+                            <label for="produto-titulo">Título</label>
+                            <input type="text" id="produto-titulo" placeholder="Ex: Macarrão" required>
                         </div>
                         <div class="form-field">
-                            <label for="tarefa-descricao">Descrição</label>
-                            <textarea id="tarefa-descricao" rows="3" placeholder="Detalhes da tarefa"></textarea>
+                            <label for="produto-descricao">Descrição</label>
+                            <textarea id="produto-descricao" rows="3" placeholder="Detalhes do produto: marca, ingredientes.."></textarea>
                         </div>
                         <div class="form-field status-field">
-                            <label for="tarefa-status">Status</label>
-                            <select id="tarefa-status">
+                            <label for="produto-status">Status</label>
+                            <select id="produto-status">
                                 <option value="novo">Novo</option>
-                                <option value="andamento">Em andamento</option>
-                                <option value="concluida">Concluída</option>
+                                <option value="dentro-validade">Dentro da validade</option>
+                                <option value="vencido">Vencido</option>
                             </select>
                         </div>
                     </div>
