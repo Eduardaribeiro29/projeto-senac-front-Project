@@ -4,18 +4,18 @@
 :root {
     /* Cores primárias (cinza, azul, verde) */
     --color-primary:        #1F4E5F;
-    --color-primary-dark:   #1d4ed8;
-    --color-primary-light:  #dbeafe;
+    --color-primary-dark:   #163845;
+    --color-primary-light:  #EAF4F7;
 
     /* Cores de superfície */
     --color-bg:             #F5F7FA;
     --color-surface:        #ffffff;
-    --color-surface-alt:    #f8fafc;
-    --color-border:         #8A8F98;
+    --color-surface-alt:    #FAFBFC;
+    --color-border:         #E2E8F0;
 
     /* Cores de texto */
-    --color-text:           #0f172a;
-    --color-text-muted:     #64748b;
+    --color-text:           #1E293B;
+    --color-text-muted:     #64748B;
 
     /* Feedback */
     --color-success:        #34C759;
@@ -93,9 +93,9 @@ body {
    TOPBAR / NAVBAR
    ============================================================ */
 .topbar {
-    background: var(--color-surface);
+    background: white;
     border-bottom: 1px solid var(--color-border);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 8px 24px rgba(0,0,0,.04);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -134,13 +134,13 @@ body {
 
 .topbar-brand .brand-name {
     font-size: var(--font-size-lg);
-    font-weight: 700;
+    font-weight: 800;
     color: var(--color-text);
     letter-spacing: -0.3px;
 }
 
 .topbar-brand .brand-name span {
-    color: var(--color-primary);
+    color: #34C759;
 }
 
 .brand-icon img {
@@ -181,19 +181,20 @@ body {
 }
 
 .nav-link.active {
-    color: var(--color-primary);
-    background: var(--color-primary-light);
-    font-weight: 600;
+    color: #1F4E5F;
+    background: white;
 }
 
 /* ============================================================
    PAGE HERO (substitui o <header> antigo)
    ============================================================ */
 .page-hero {
-    background: linear-gradient(135deg, var(--color-primary) 0%, #1F4E5F 100%);
+    background: #1F4E5F;
     color: white;
-    padding: var(--space-12) var(--space-4);
+    padding: 80px 20px;
     text-align: center;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
 }
 
 .page-hero h1 {
@@ -226,12 +227,12 @@ body {
    CARD
    ============================================================ */
 .card {
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-8);
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 32px;
     margin-bottom: var(--space-6);
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0,0,0,.05), 0 12px 24px rgba(0,0,0,.04);
 }
 
 .card-header {
@@ -305,10 +306,10 @@ body {
 
 .form-field input {
     width: 100%;
-    padding: 10px var(--space-4);
-    border: 1.5px solid var(--color-border);
-    border-radius: var(--radius-md);
-    background: var(--color-surface-alt);
+    padding: 14px 16px;
+    border: 2px solid #E2E8F0;
+    border-radius: 12px;
+    background: white;
     font-size: var(--font-size-base);
     color: var(--color-text);
     transition: border-color var(--transition), box-shadow var(--transition);
@@ -316,8 +317,8 @@ body {
 }
 
 .form-field input:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px #F5F7FA(99, 102, 241, 0.15);
+    border-color: #34C759;
+    box-shadow: 0 0 0 4px rgba(52,199,89,.15);
     background: white;
 }
 
@@ -410,7 +411,7 @@ a.button {
 button:hover,
 button[type="submit"]:hover,
 a.button:hover {
-    background: var(--color-primary-dark);
+    background: #2CB34E;
     box-shadow: 0 4px 12px rg#F5F7FAba(99,102,241,0.3);
     transform: translateY(-1px);
 }
@@ -475,18 +476,17 @@ button.small {
     align-items: flex-start;
     gap: var(--space-2);
     padding: var(--space-5);
-    border-radius: var(--radius-lg);
-    background: var(--color-surface-alt);
-    border: 1.5px solid var(--color-border);
+    border-radius: 18px;
+    background: white;
+    border: none;
     text-decoration: none;
     color: var(--color-text);
-    transition: border-color var(--transition), box-shadow var(--transition), transform var(--transition);
+    transition: border-color var(--transition), box-shadow 0 2px 10px rgba(0,0,0,.05), transform var(--transition);
 }
 
 .quick-link-item:hover {
-    border-color: var(--color-primary);
-    box-shadow: var(--shadow-md);
-    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,.08);
+    transform: translateY(-4px);
 }
 
 .quick-link-item .ql-icon {
@@ -607,36 +607,36 @@ button.small {
     transition: border-color var(--transition), box-shadow var(--transition);
 }
 
-.tarefa-card:hover {
+.produto-card:hover {
     border-color: var(--color-primary);
     box-shadow: var(--shadow-md);
 }
 
-.tarefa-card.done {
+.produto-card.done {
     background: #f0fdf4;
     border-color: #bbf7d0;
 }
 
-.tarefa-card-title {
+.produto-card-title {
     font-size: var(--font-size-base);
     font-weight: 600;
     color: var(--color-text);
     word-break: break-word;
 }
 
-.tarefa-card-desc {
+.produto-card-desc {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
     margin-top: 2px;
     word-break: break-word;
 }
 
-.tarefa-card.done .tarefa-card-title {
+.produto-card.done .produto-card-title {
     text-decoration: line-through;
     color: var(--color-text-muted);
 }
 
-.tarefa-card-actions {
+.produto-card-actions {
     display: flex;
     gap: var(--space-2);
     margin-top: auto;
@@ -877,18 +877,18 @@ table tbody tr:hover { background: #fafafa; }
 }
 
 .status-pill.novo {
-    background: #e5e7eb;
-    color: #374151;
-}
-
-.status-pill.andamento {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.status-pill.concluida {
-    background: #dcfce7;
+    background: #DCFCE7;
     color: #166534;
+}
+
+.status-pill.dentro-validade {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.status-pill.vencido {
+    background: #FEE2E2;
+    color: #991B1B;
 }
 
 .kanban-board {
@@ -910,12 +910,12 @@ table tbody tr:hover { background: #fafafa; }
 }
 
 .kanban-card,
-.tarefa-card {
+.produto-card {
     cursor: grab;
 }
 
 .kanban-card:active,
-.tarefa-card:active {
+.produto-card:active {
     cursor: grabbing;
 }
 
@@ -939,20 +939,9 @@ table tbody tr:hover { background: #fafafa; }
    BOOTSTRAP OVERRIDES E NOVOS COMPONENTES
    ============================================================ */
 .page-hero {
-    background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 55%, #38bdf8 100%);
+    background: #1F4E5F;
     position: relative;
     overflow: hidden;
-}
-
-.page-hero::after {
-    content: '';
-    position: absolute;
-    inset: auto -10% -40% auto;
-    width: 320px;
-    height: 320px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    filter: blur(10px);
 }
 
 .page-hero .container {
