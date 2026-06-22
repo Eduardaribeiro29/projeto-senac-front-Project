@@ -1,7 +1,6 @@
 const formProduto = document.getElementById('form-produto');
 const inputId = document.getElementById('produto-id');
 const inputTitulo = document.getElementById('produto-titulo');
-const inputDescricao = document.getElementById('produto-descricao');
 const inputData_validade = document.getElementById('produto-data-validade');
 const inputData_fabricacao = document.getElementById('produto-data-fabricacao');
 const inputQuantidade = document.getElementById('produto-quantidade');
@@ -69,11 +68,11 @@ function criarBadgeStatus(status) {
 
 function criarCardHtml(produto) {
     const status = normalizarStatus(produto);
-    const descricao = produto.descricao || '';
+    const titulo = produto.titulo || '';
     return `
         <div class="produto-card ${status}">
             <div class="produto-card-title"><b>#${produto.id}</b> ${produto.titulo}</div>
-            ${descricao ? `<div class="produto-card-desc">${descricao}</div>` : ''}
+            ${titulo ? `<div class="produto-card-desc">${titulo}</div>` : ''}
             <div>${criarBadgeStatus(status)}</div>
         </div>
     `;
@@ -88,7 +87,7 @@ function criarKanbanItem(produto) {
 
     item.innerHTML = `
         <div class="produto-card-title"><b>#${produto.id}</b> ${produto.titulo}</div>
-        ${produto.descricao ? `<div class="produto-card-desc">${produto.descricao}</div>` : ''}
+        ${produto.titulo ? `<div class="produto-card-desc">${produto.titulo}</div>` : ''}
         <div>${criarBadgeStatus(status)}</div>
     `;
 
@@ -136,7 +135,6 @@ function renderTabela() {
         linha.innerHTML = `
             <td>${produto.id}</td>
             <td>${produto.titulo}</td>
-            <td>${produto.descricao || '-'}</td>
             <td>${produto.data_validade || '-'}</td>
             <td>${produto.data_fabricacao || '-'}</td>
             <td>${produto.quantidade || '-'}</td>
@@ -200,7 +198,6 @@ async function carregarProdutos() {
 async function atualizarStatusApi(produto, novoStatus) {
     const payload = {
         titulo: produto.titulo,
-        descricao: produto.descricao || '',
         status: novoStatus,
         vencido: novoStatus === 'vencido',
     };
@@ -246,7 +243,6 @@ function getProdutoById(id) {
 
 function setCamposSomenteLeitura(somenteLeitura) {
     inputTitulo.readOnly = somenteLeitura;
-    inputDescricao.readOnly = somenteLeitura;
     inputData_validade.readOnly = somenteLeitura;
     inputData_fabricacao.readOnly = somenteLeitura;
     inputQuantidade.readOnly = somenteLeitura;
@@ -256,7 +252,6 @@ function setCamposSomenteLeitura(somenteLeitura) {
 function preencherModal(produto) {
     inputId.value = produto?.id || '';
     inputTitulo.value = produto?.titulo || '';
-    inputDescricao.value = produto?.descricao || '';
     inputData_validade.value = produto?.data_validade || '';
     inputData_fabricacao.value = produto?.data_fabricacao || '';
     inputQuantidade.value = produto?.quantidade || '';
@@ -287,7 +282,7 @@ function aplicarModoModal() {
 function abrirNovoProduto() {
     produtoSelecionadoId = null;
     modalMode = 'create';
-    preencherModal({ id: '', titulo: '', descricao: '', data_validade: '', data_fabricacao: '', quantidade: '' });
+    preencherModal({ id: '', titulo: '', data_validade: '', data_fabricacao: '', quantidade: '' });
     aplicarModoModal();
 }
 
@@ -346,7 +341,6 @@ async function criarProduto(event) {
 
     const id = inputId.value;
     const titulo = inputTitulo.value.trim();
-    const descricao = inputDescricao.value.trim();
     const data_validade = inputData_validade.value.trim();
     const data_fabricacao = inputData_fabricacao.value.trim();
     const quantidade = inputQuantidade.value.trim();
@@ -356,7 +350,7 @@ async function criarProduto(event) {
 
     try {
         if (modalMode === 'edit' && id) {
-            const payload = { titulo, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' };
+            const payload = { titulo, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' };
             const resposta = await apiRequest(`/produtos/${id}`, {
                 method: 'PUT',
                 body: payload,
@@ -375,11 +369,11 @@ async function criarProduto(event) {
         } else {
             const nova = await apiRequest('/produtos', {
                 method: 'POST',
-                body: { titulo, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' },
+                body: { titulo, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' },
             });
 
             if (nova && nova.id) {
-                produtos.push({ ...nova, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' });
+                produtos.push({ ...nova, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' });
             } else {
                 await carregarProdutos();
             }
