@@ -40,7 +40,7 @@
             </div>
 
             <div class="view-switch-simple" role="tablist" aria-label="Modo de visualização">
-                <button id="view-cards" class="small active" type="button">Cards (solto)</button>
+                <button id="view-cards" class="small active" type="button">Cards</button>
                 <button id="view-kanban" class="small" type="button">Kanban</button>
                 <button id="view-table" class="small" type="button">Tabela</button>
             </div>
@@ -58,9 +58,9 @@
                     <h3>Novo</h3>
                     <div id="kanban-novo" class="kanban-list"></div>
                 </div>
-                <div class="kanban-column" data-status="dentro-validade">
+                <div class="kanban-column" data-status="valido">
                     <h3>Dentro da Validade</h3>
-                    <div id="kanban-dentro-validade" class="kanban-list"></div>
+                    <div id="kanban-valido" class="kanban-list"></div>
                 </div>
                 <div class="kanban-column" data-status="vencido">
                     <h3>Vencido</h3>
@@ -75,12 +75,10 @@
                     <tr>
                         <th>#ID</th>
                         <th>Título</th>
-                        <th>Descrição</th>
-                        <th>Data de Validade</th>
                         <th>Data de Fabricação</th>
+                        <th>Data de Validade</th>
                         <th>Quantidade</th>
                         <th>Status</th>
-                        <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody id="lista-produtos-tabela"></tbody>
@@ -105,14 +103,22 @@
                             <input type="text" id="produto-titulo" placeholder="Ex: Macarrão" required>
                         </div>
                         <div class="form-field">
-                            <label for="produto-descricao">Descrição</label>
-                            <textarea id="produto-descricao" rows="3" placeholder="Detalhes do produto: marca, ingredientes.."></textarea>
+                            <label for="produto-data-fabricacao">Data de Fabricação</label>
+                            <data type="data-bs-target" placeholder="ex:02/05/2026" required></data>
+                        </div>
+                        <div class="form-field">
+                            <label for="produto-data-validade">Data de Validade</label>
+                            <data type="data-bs-target" placeholder="ex:09/11/2026" required></data>
+                        </div>
+                        <div class="form-field">
+                            <label for="produto-quantidade">Quantidade</label>
+                            <input type="number" placeholder="Ex: 3" required>
                         </div>
                         <div class="form-field status-field">
                             <label for="produto-status">Status</label>
                             <select id="produto-status">
                                 <option value="novo">Novo</option>
-                                <option value="dentro-validade">Dentro da validade</option>
+                                <option value="valido">Dentro da validade</option>
                                 <option value="vencido">Vencido</option>
                             </select>
                         </div>

@@ -1,4 +1,4 @@
-const API_BASE = 'https://produtos-api-five.vercel.app';
+const API_BASE = 'https://prazu-api.vercel.app';
 // const API_BASE = 'http://localhost:3000';
 
 const TOKEN_KEY = 'token-api-1234';
