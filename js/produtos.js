@@ -1,20 +1,20 @@
-const formTarefa = document.getElementById('form-tarefa');
-const inputId = document.getElementById('tarefa-id');
-const inputTitulo = document.getElementById('tarefa-titulo');
-const inputDescricao = document.getElementById('tarefa-descricao');
-const inputStatus = document.getElementById('tarefa-status');
-const modalTitle = document.getElementById('tarefaModalTitle');
-const btnNovaTarefa = document.getElementById('btn-nova-tarefa');
+const formProduto = document.getElementById('form-produto');
+const inputId = document.getElementById('produto-id');
+const inputTitulo = document.getElementById('produto-titulo');
+const inputDescricao = document.getElementById('produto-descricao');
+const inputStatus = document.getElementById('produto-status');
+const modalTitle = document.getElementById('produtoModalTitle');
+const btnNovaProduto = document.getElementById('btn-novo-produto');
 const btnModalSalvar = document.getElementById('btn-modal-salvar');
 const btnModalEditar = document.getElementById('btn-modal-editar');
 const btnModalExcluir = document.getElementById('btn-modal-excluir');
 
-const listaCards = document.getElementById('lista-tarefas-cards');
-const listaTabela = document.getElementById('lista-tarefas-tabela');
+const listaCards = document.getElementById('lista-produtos-cards');
+const listaTabela = document.getElementById('lista-produtos-tabela');
 
-const cardsWrapper = document.getElementById('tarefas-cards-wrapper');
-const kanbanWrapper = document.getElementById('tarefas-kanban-wrapper');
-const tabelaWrapper = document.getElementById('tarefas-tabela-wrapper');
+const cardsWrapper = document.getElementById('produtos-cards-wrapper');
+const kanbanWrapper = document.getElementById('produtos-kanban-wrapper');
+const tabelaWrapper = document.getElementById('produtos-tabela-wrapper');
 
 const colunaNovo = document.getElementById('kanban-novo');
 const colunaAndamento = document.getElementById('kanban-andamento');

@@ -1,4 +1,4 @@
-const API_BASE = 'https://tarefas-api-five.vercel.app';
+const API_BASE = 'https://produtos-api-five.vercel.app';
 // const API_BASE = 'http://localhost:3000';
 
 const TOKEN_KEY = 'token-api-1234';
@@ -25,7 +25,7 @@ function setupTopbarAuth() {
     links.forEach((link) => {
         const href = (link.getAttribute('href') || '').trim();
         const show = href === 'index.html'
-            || href === 'tarefas.html'
+            || href === 'produtos.html'
             || href === 'login.html'
             || href === 'cadastro.html'
             || (token && href === 'perfil.html');

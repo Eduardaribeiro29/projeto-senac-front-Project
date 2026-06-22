@@ -10,6 +10,7 @@ const perfilFoto = document.getElementById('perfil-foto');
 const perfilNome = document.getElementById('perfil-nome');
 const perfilEmail = document.getElementById('perfil-email');
 const perfilTelefone = document.getElementById('perfil-telefone');
+const perfilProfissao = document.getElementById('perfil-profissao');
 const perfilSenha = document.getElementById('perfil-senha');
 
 const IMAGEM_PADRAO = 'img/img-default.svg';
@@ -32,6 +33,7 @@ function preencherFormulario(perfil) {
     if (perfilNome) perfilNome.value = perfil.nome || '';
     if (perfilEmail) perfilEmail.value = perfil.email || '';
     if (perfilTelefone) perfilTelefone.value = perfil.telefone || '';
+    if (perfilProfissao) perfilProfissao.value = perfil.profissao || '';
     if (perfilSenha) perfilSenha.value = '';
 }
 
@@ -55,6 +57,7 @@ function renderizarPerfil(perfil) {
             ${criarItemPerfil('Nome', perfil.nome)}
             ${criarItemPerfil('E-mail', perfil.email)}
             ${criarItemPerfil('Telefone', perfil.telefone)}
+            ${criarItemPerfil('Profissao', perfil.profissao)}
         `;
     }
 
@@ -93,6 +96,7 @@ async function salvarPerfil(event) {
     formData.append('nome', (perfilNome?.value || '').trim());
     formData.append('email', (perfilEmail?.value || '').trim());
     formData.append('telefone', (perfilTelefone?.value || '').trim());
+    formData.append('profissao', (perfilProfissao?.value || '').trim());
 
     if (senha) formData.append('senha', senha);
     if (fotoSelecionada) formData.append('foto', fotoSelecionada);

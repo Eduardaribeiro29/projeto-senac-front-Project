@@ -15,7 +15,7 @@ async function loginUsuario(event) {
         setToken(dados.token || dados.accessToken || '');
         mostrarResultado('Login realizado com sucesso. Redirecionando...');
         setTimeout(() => {
-            window.location.href = 'tarefas.html';
+            window.location.href = 'produtos.html';
         }, 600);
     } catch (erro) {
         mostrarResultado(`Falha no login: ${erro.message}`, 'error');

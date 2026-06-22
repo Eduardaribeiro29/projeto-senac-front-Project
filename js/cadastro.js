@@ -9,6 +9,7 @@ async function cadastrarUsuario(event) {
         nome: document.getElementById('cadastro-nome').value.trim(),
         email: document.getElementById('cadastro-email').value.trim(),
         telefone: document.getElementById('cadastro-telefone').value.trim(),
+        profissao: document.getElementById('cadastro-profissao').value.trim(),
         senha: document.getElementById('cadastro-senha').value,
     };
 
