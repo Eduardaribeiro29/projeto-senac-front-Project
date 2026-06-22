@@ -2,6 +2,9 @@ const formProduto = document.getElementById('form-produto');
 const inputId = document.getElementById('produto-id');
 const inputTitulo = document.getElementById('produto-titulo');
 const inputDescricao = document.getElementById('produto-descricao');
+const inputData_validade = document.getElementById('produto-data-validade');
+const inputData_fabricacao = document.getElementById('produto-data-fabricacao');
+const inputQuantidade = document.getElementById('produto-quantidade');
 const inputStatus = document.getElementById('produto-status');
 const modalTitle = document.getElementById('produtoModalTitle');
 const btnNovaProduto = document.getElementById('btn-novo-produto');
@@ -17,35 +20,35 @@ const kanbanWrapper = document.getElementById('produtos-kanban-wrapper');
 const tabelaWrapper = document.getElementById('produtos-tabela-wrapper');
 
 const colunaNovo = document.getElementById('kanban-novo');
-const colunaAndamento = document.getElementById('kanban-andamento');
-const colunaConcluida = document.getElementById('kanban-concluida');
+const colunaValido = document.getElementById('kanban-valido');
+const colunaVencido = document.getElementById('kanban-vencido');
 
 const btnViewCards = document.getElementById('view-cards');
 const btnViewKanban = document.getElementById('view-kanban');
 const btnViewTable = document.getElementById('view-table');
-const tarefaModalEl = document.getElementById('tarefaModal');
+const produtoModalEl = document.getElementById('produtoModal');
 
-const tarefaModal = tarefaModalEl && window.bootstrap
-    ? bootstrap.Modal.getOrCreateInstance(tarefaModalEl)
+const produtoModal = produtoModalEl && window.bootstrap
+    ? bootstrap.Modal.getOrCreateInstance(produtoModalEl)
     : null;
 
 const STATUS_LABEL = {
     novo: 'Novo',
-    andamento: 'Em andamento',
-    concluida: 'Concluída',
+    valido: 'Dentro da Validade',
+    vencido: 'Vencido',
 };
 
-let tarefas = [];
+let produtos = [];
 let viewMode = 'cards';
-let tarefaSelecionadaId = null;
+let produtoSelecionadoId = null;
 let modalMode = 'create';
 
-function normalizarStatus(tarefa) {
-    const bruto = String(tarefa?.status || '').toLowerCase();
+function normalizarStatus(produto) {
+    const bruto = String(produto?.status || '').toLowerCase();
 
-    if (bruto.includes('and')) return 'andamento';
-    if (bruto.includes('concl')) return 'concluida';
-    if (tarefa?.concluida) return 'concluida';
+    if (bruto.includes('and')) return 'valido';
+    if (bruto.includes('concl')) return 'vencido';
+    if (produto?.vencido) return 'vencido';
 
     return 'novo';
 }
@@ -64,37 +67,37 @@ function criarBadgeStatus(status) {
     return `<span class="status-pill ${status}">${STATUS_LABEL[status] || 'Novo'}</span>`;
 }
 
-function criarCardHtml(tarefa) {
-    const status = normalizarStatus(tarefa);
-    const descricao = tarefa.descricao || '';
+function criarCardHtml(produto) {
+    const status = normalizarStatus(produto);
+    const descricao = produto.descricao || '';
     return `
-        <div class="tarefa-card ${status}">
-            <div class="tarefa-card-title"><b>#${tarefa.id}</b> ${tarefa.titulo}</div>
-            ${descricao ? `<div class="tarefa-card-desc">${descricao}</div>` : ''}
+        <div class="produto-card ${status}">
+            <div class="produto-card-title"><b>#${produto.id}</b> ${produto.titulo}</div>
+            ${descricao ? `<div class="produto-card-desc">${descricao}</div>` : ''}
             <div>${criarBadgeStatus(status)}</div>
         </div>
     `;
 }
 
-function criarKanbanItem(tarefa) {
-    const status = normalizarStatus(tarefa);
+function criarKanbanItem(produto) {
+    const status = normalizarStatus(produto);
     const item = document.createElement('div');
     item.className = `kanban-card ${status}`;
     item.draggable = true;
-    item.dataset.id = tarefa.id;
+    item.dataset.id = produto.id;
 
     item.innerHTML = `
-        <div class="tarefa-card-title"><b>#${tarefa.id}</b> ${tarefa.titulo}</div>
-        ${tarefa.descricao ? `<div class="tarefa-card-desc">${tarefa.descricao}</div>` : ''}
+        <div class="produto-card-title"><b>#${produto.id}</b> ${produto.titulo}</div>
+        ${produto.descricao ? `<div class="produto-card-desc">${produto.descricao}</div>` : ''}
         <div>${criarBadgeStatus(status)}</div>
     `;
 
     item.addEventListener('dragstart', (event) => {
-        event.dataTransfer.setData('text/plain', String(tarefa.id));
+        event.dataTransfer.setData('text/plain', String(produto.id));
     });
 
     item.addEventListener('click', () => {
-        verTarefa(tarefa.id);
+        verProduto(produto.id);
     });
 
     return item;
@@ -103,17 +106,17 @@ function criarKanbanItem(tarefa) {
 function renderCards() {
     listaCards.innerHTML = '';
 
-    if (!tarefas.length) {
-        listaCards.innerHTML = '<div class="empty-state"><p>Nenhuma tarefa encontrada.</p></div>';
+    if (!produtos.length) {
+        listaCards.innerHTML = '<div class="empty-state"><p>Nenhum produto encontrado.</p></div>';
         return;
     }
 
-    tarefas.forEach((tarefa) => {
+    produtos.forEach((produto) => {
         const card = document.createElement('div');
-        card.innerHTML = criarCardHtml(tarefa);
+        card.innerHTML = criarCardHtml(produto);
         const item = card.firstElementChild;
         item.addEventListener('click', () => {
-            verTarefa(tarefa.id);
+            verProduto(produto.id);
         });
         listaCards.appendChild(item);
     });
@@ -122,23 +125,26 @@ function renderCards() {
 function renderTabela() {
     listaTabela.innerHTML = '';
 
-    if (!tarefas.length) {
-        listaTabela.innerHTML = '<tr><td colspan="5">Nenhuma tarefa encontrada.</td></tr>';
+    if (!produtos.length) {
+        listaTabela.innerHTML = '<tr><td colspan="5">Nenhum produto encontrado.</td></tr>';
         return;
     }
 
-    tarefas.forEach((tarefa) => {
-        const status = normalizarStatus(tarefa);
+    produtos.forEach((produto) => {
+        const status = normalizarStatus(produto);
         const linha = document.createElement('tr');
         linha.innerHTML = `
-            <td>${tarefa.id}</td>
-            <td>${tarefa.titulo}</td>
-            <td>${tarefa.descricao || '-'}</td>
+            <td>${produto.id}</td>
+            <td>${produto.titulo}</td>
+            <td>${produto.descricao || '-'}</td>
+            <td>${produto.data_validade || '-'}</td>
+            <td>${produto.data_fabricacao || '-'}</td>
+            <td>${produto.quantidade || '-'}</td>
             <td>${criarBadgeStatus(status)}</td>
             <td class="table-actions">
-                <button type="button" class="small" onclick="verTarefa(${tarefa.id})">Ver</button>
-                <button type="button" class="small" onclick="editarTarefa(${tarefa.id})">Editar</button>
-                <button type="button" class="small danger" onclick="excluirTarefa(${tarefa.id})">Excluir</button>
+                <button type="button" class="small" onclick="verProduto(${produto.id})">Ver</button>
+                <button type="button" class="small" onclick="editarProduto(${produto.id})">Editar</button>
+                <button type="button" class="small danger" onclick="excluirProduto(${produto.id})">Excluir</button>
             </td>
         `;
         listaTabela.appendChild(linha);
@@ -147,17 +153,17 @@ function renderTabela() {
 
 function renderKanban() {
     colunaNovo.innerHTML = '';
-    colunaAndamento.innerHTML = '';
-    colunaConcluida.innerHTML = '';
+    colunaValido.innerHTML = '';
+    colunaVencido.innerHTML = '';
 
-    tarefas.forEach((tarefa) => {
-        const status = normalizarStatus(tarefa);
-        const card = criarKanbanItem(tarefa);
+    produtos.forEach((produto) => {
+        const status = normalizarStatus(produto);
+        const card = criarKanbanItem(produto);
 
-        if (status === 'andamento') {
-            colunaAndamento.appendChild(card);
-        } else if (status === 'concluida') {
-            colunaConcluida.appendChild(card);
+        if (status === 'valido') {
+            colunaValido.appendChild(card);
+        } else if (status === 'vencido') {
+            colunaVencido.appendChild(card);
         } else {
             colunaNovo.appendChild(card);
         }
@@ -171,49 +177,49 @@ function renderTudo() {
     aplicarViewMode();
 }
 
-async function carregarTarefas() {
+async function carregarProdutos() {
     try {
-        const resposta = await apiRequest('/tarefas');
+        const resposta = await apiRequest('/produtos');
 
         if (Array.isArray(resposta)) {
-            tarefas = resposta;
-        } else if (Array.isArray(resposta?.tarefas)) {
-            tarefas = resposta.tarefas;
+            produtos = resposta;
+        } else if (Array.isArray(resposta?.produtos)) {
+            produtos = resposta.produtos;
         } else if (Array.isArray(resposta?.data)) {
-            tarefas = resposta.data;
+            produtos = resposta.data;
         } else {
-            tarefas = [];
+            produtos = [];
         }
 
         renderTudo();
     } catch (erro) {
-        mostrarResultado(`Erro ao carregar tarefas: ${erro.message}`, 'error');
+        mostrarResultado(`Erro ao carregar produtos: ${erro.message}`, 'error');
     }
 }
 
-async function atualizarStatusApi(tarefa, novoStatus) {
+async function atualizarStatusApi(produto, novoStatus) {
     const payload = {
-        titulo: tarefa.titulo,
-        descricao: tarefa.descricao || '',
+        titulo: produto.titulo,
+        descricao: produto.descricao || '',
         status: novoStatus,
-        concluida: novoStatus === 'concluida',
+        vencido: novoStatus === 'vencido',
     };
 
-    await apiRequest(`/tarefas/${tarefa.id}`, {
+    await apiRequest(`/produtos/${produto.id}`, {
         method: 'PUT',
         body: payload,
     });
 }
 
-async function  moverTarefa(id, novoStatus) {
-    const tarefa = tarefas.find((item) => String(item.id) === String(id));
-    if (!tarefa) return;
+async function  moverProduto(id, novoStatus) {
+    const produto = produtos.find((item) => String(item.id) === String(id));
+    if (!produto) return;
 
     try {
-        await atualizarStatusApi(tarefa, novoStatus);
+        await atualizarStatusApi(produto, novoStatus);
 
-        tarefa.status = novoStatus;
-        tarefa.concluida = novoStatus === 'concluida';
+        produto.status = novoStatus;
+        produto.vencido = novoStatus === 'vencido';
 
         renderTudo();
         mostrarResultado(`Status atualizado para ${STATUS_LABEL[novoStatus]}.`);
@@ -230,25 +236,31 @@ function configurarDrop(coluna, statusDestino) {
     coluna.addEventListener('drop', async (event) => {
         event.preventDefault();
         const id = event.dataTransfer.getData('text/plain');
-        await moverTarefa(id, statusDestino);
+        await moverProduto(id, statusDestino);
     });
 }
 
-function getTarefaById(id) {
-    return tarefas.find((item) => String(item.id) === String(id));
+function getProdutoById(id) {
+    return produtos.find((item) => String(item.id) === String(id));
 }
 
 function setCamposSomenteLeitura(somenteLeitura) {
     inputTitulo.readOnly = somenteLeitura;
     inputDescricao.readOnly = somenteLeitura;
+    inputData_validade.readOnly = somenteLeitura;
+    inputData_fabricacao.readOnly = somenteLeitura;
+    inputQuantidade.readOnly = somenteLeitura;
     inputStatus.disabled = somenteLeitura;
 }
 
-function preencherModal(tarefa) {
-    inputId.value = tarefa?.id || '';
-    inputTitulo.value = tarefa?.titulo || '';
-    inputDescricao.value = tarefa?.descricao || '';
-    inputStatus.value = normalizarStatus(tarefa || {});
+function preencherModal(produto) {
+    inputId.value = produto?.id || '';
+    inputTitulo.value = produto?.titulo || '';
+    inputDescricao.value = produto?.descricao || '';
+    inputData_validade.value = produto?.data_validade || '';
+    inputData_fabricacao.value = produto?.data_fabricacao || '';
+    inputQuantidade.value = produto?.quantidade || '';
+    inputStatus.value = normalizarStatus(produto || {});
 }
 
 function aplicarModoModal() {
@@ -262,124 +274,127 @@ function aplicarModoModal() {
     btnModalExcluir.classList.toggle('is-hidden', isCreate);
 
     if (isCreate) {
-        modalTitle.textContent = 'Nova tarefa';
+        modalTitle.textContent = 'Novo produto';
         btnModalSalvar.textContent = 'Salvar';
     } else if (isView) {
-        modalTitle.textContent = 'Detalhes da tarefa';
+        modalTitle.textContent = 'Detalhes do produto';
     } else {
-        modalTitle.textContent = 'Editar tarefa';
+        modalTitle.textContent = 'Editar produto';
         btnModalSalvar.textContent = 'Salvar alterações';
     }
 }
 
-function abrirNovaTarefa() {
-    tarefaSelecionadaId = null;
+function abrirNovoProduto() {
+    produtoSelecionadoId = null;
     modalMode = 'create';
-    preencherModal({ id: '', titulo: '', descricao: '', status: 'novo' });
+    preencherModal({ id: '', titulo: '', descricao: '', data_validade: '', data_fabricacao: '', quantidade: '' });
     aplicarModoModal();
 }
 
-function verTarefa(id) {
-    const tarefa = getTarefaById(id);
-    if (!tarefa) return;
+function verProduto(id) {
+    const produto = getProdutoById(id);
+    if (!produto) return;
 
-    tarefaSelecionadaId = tarefa.id;
+    produtoSelecionadoId = produto.id;
     modalMode = 'view';
-    preencherModal(tarefa);
+    preencherModal(produto);
     aplicarModoModal();
-    tarefaModal?.show();
+    produtoModal?.show();
 }
 
-function editarTarefa(id = null) {
-    const tarefa = getTarefaById(id || tarefaSelecionadaId);
-    if (!tarefa) return;
+function editarProduto(id = null) {
+    const produto = getProdutoById(id || produtoSelecionadoId);
+    if (!produto) return;
 
-    tarefaSelecionadaId = tarefa.id;
+    produtoSelecionadoId = produto.id;
     modalMode = 'edit';
-    preencherModal(tarefa);
+    preencherModal(produto);
     aplicarModoModal();
-    tarefaModal?.show();
+    produtoModal?.show();
 }
 
-async function excluirTarefa(id = null) {
-    const tarefa = getTarefaById(id || tarefaSelecionadaId);
-    if (!tarefa) return;
+async function excluirProduto(id = null) {
+    const produto = getProdutoById(id || produtoSelecionadoId);
+    if (!produto) return;
 
     const confirmar = window.Swal
         ? await Swal.fire({
             icon: 'warning',
-            text: `Excluir a tarefa "${tarefa.titulo}"?`,
+            text: `Excluir a produto "${produto.titulo}"?`,
             showCancelButton: true,
             confirmButtonText: 'Excluir',
             cancelButtonText: 'Cancelar',
             confirmButtonColor: '#dc2626',
         })
-        : { isConfirmed: confirm('Excluir esta tarefa?') };
+        : { isConfirmed: confirm('Excluir este produto?') };
 
     if (!confirmar.isConfirmed) return;
 
     try {
-        await apiRequest(`/tarefas/${tarefa.id}`, { method: 'DELETE' });
-        tarefas = tarefas.filter((item) => String(item.id) !== String(tarefa.id));
-        tarefaModal?.hide();
+        await apiRequest(`/produtos/${produto.id}`, { method: 'DELETE' });
+        produtos = produtos.filter((item) => String(item.id) !== String(produto.id));
+        produtoModal?.hide();
         renderTudo();
-        mostrarResultado('Tarefa excluída com sucesso.');
+        mostrarResultado('Produto excluído com sucesso.');
     } catch (erro) {
-        mostrarResultado(`Erro ao excluir tarefa: ${erro.message}`, 'error');
+        mostrarResultado(`Erro ao excluir produto: ${erro.message}`, 'error');
     }
 }
 
-async function criarTarefa(event) {
+async function criarProduto(event) {
     event.preventDefault();
 
     const id = inputId.value;
     const titulo = inputTitulo.value.trim();
     const descricao = inputDescricao.value.trim();
+    const data_validade = inputData_validade.value.trim();
+    const data_fabricacao = inputData_fabricacao.value.trim();
+    const quantidade = inputQuantidade.value.trim();
     const status = inputStatus.value;
 
     if (!titulo) return;
 
     try {
         if (modalMode === 'edit' && id) {
-            const payload = { titulo, descricao, status, concluida: status === 'concluida' };
-            const resposta = await apiRequest(`/tarefas/${id}`, {
+            const payload = { titulo, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' };
+            const resposta = await apiRequest(`/produtos/${id}`, {
                 method: 'PUT',
                 body: payload,
             });
 
-            const index = tarefas.findIndex((item) => String(item.id) === String(id));
+            const index = produtos.findIndex((item) => String(item.id) === String(id));
             if (index >= 0) {
-                tarefas[index] = {
-                    ...tarefas[index],
+                produtos[index] = {
+                    ...produtos[index],
                     ...payload,
                     ...(typeof resposta === 'object' ? resposta : {}),
                 };
             }
 
-            mostrarResultado('Tarefa atualizada com sucesso.');
+            mostrarResultado('Produto atualizado com sucesso.');
         } else {
-            const nova = await apiRequest('/tarefas', {
+            const nova = await apiRequest('/produtos', {
                 method: 'POST',
-                body: { titulo, descricao, status, concluida: status === 'concluida' },
+                body: { titulo, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' },
             });
 
             if (nova && nova.id) {
-                tarefas.push({ ...nova, descricao, status, concluida: status === 'concluida' });
+                produtos.push({ ...nova, descricao, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' });
             } else {
-                await carregarTarefas();
+                await carregarProdutos();
             }
 
-            mostrarResultado('Tarefa criada com sucesso.');
+            mostrarResultado('Produto criado com sucesso.');
         }
 
         renderTudo();
-        if (tarefaModal) tarefaModal.hide();
-        formTarefa.reset();
+        if (produtoModal) produtoModal.hide();
+        formProduto.reset();
         inputStatus.value = 'novo';
         modalMode = 'create';
-        tarefaSelecionadaId = null;
+        produtoSelecionadoId = null;
     } catch (erro) {
-        mostrarResultado(`Erro ao salvar tarefa: ${erro.message}`, 'error');
+        mostrarResultado(`Erro ao salvar produto: ${erro.message}`, 'error');
     }
 }
 
@@ -398,19 +413,19 @@ btnViewTable.addEventListener('click', () => {
     aplicarViewMode();
 });
 
-formTarefa.addEventListener('submit', criarTarefa);
+formProduto.addEventListener('submit', criarProduto);
 
-btnNovaTarefa.addEventListener('click', abrirNovaTarefa);
-btnModalEditar.addEventListener('click', () => editarTarefa());
-btnModalExcluir.addEventListener('click', () => excluirTarefa());
+btnNovoPoduto.addEventListener('click', abrirNovoProduto);
+btnModalEditar.addEventListener('click', () => editarProduto());
+btnModalExcluir.addEventListener('click', () => excluirProduto());
 
-window.verTarefa = verTarefa;
-window.editarTarefa = editarTarefa;
-window.excluirTarefa = excluirTarefa;
+window.verProduto = verProduto;
+window.editarProduto = editarProduto;
+window.excluirProduto = excluirProduto;
 
 configurarDrop(colunaNovo, 'novo');
-configurarDrop(colunaAndamento, 'andamento');
-configurarDrop(colunaConcluida, 'concluida');
+configurarDrop(colunaValido, 'valido');
+configurarDrop(colunaVencido, 'vencido');
 
 window.addEventListener('DOMContentLoaded', async () => {
     if (!getToken()) {
@@ -418,5 +433,5 @@ window.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    await carregarTarefas();
+    await carregarProdutos();
 });
