@@ -409,7 +409,7 @@ btnViewTable.addEventListener('click', () => {
 
 formProduto.addEventListener('submit', criarProduto);
 
-btnNovoPoduto.addEventListener('click', abrirNovoProduto);
+btnNovoProduto.addEventListener('click', abrirNovoProduto);
 btnModalEditar.addEventListener('click', () => editarProduto());
 btnModalExcluir.addEventListener('click', () => excluirProduto());
 
