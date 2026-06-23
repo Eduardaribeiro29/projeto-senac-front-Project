@@ -88,10 +88,6 @@ async function apiRequest(path, options = {}) {
         headers.Authorization = `Bearer ${token}`;
     }
 
-    if (resposta.status === 401) {
-        logout();
-    }
-
     const resposta = await fetch(`${API_BASE}${path}`, {
         method: options.method || 'GET',
         headers,
