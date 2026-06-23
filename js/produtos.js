@@ -4,6 +4,7 @@ const inputTitulo = document.getElementById('produto-titulo');
 const inputData_validade = document.getElementById('produto-data-validade');
 const inputData_fabricacao = document.getElementById('produto-data-fabricacao');
 const inputQuantidade = document.getElementById('produto-quantidade');
+const inputFoto = document.getElementById('produto-foto');
 const inputStatus = document.getElementById('produto-status');
 const modalTitle = document.getElementById('produtoModalTitle');
 const btnNovoProduto = document.getElementById('btn-novo-produto');
@@ -30,6 +31,7 @@ const produtoModalEl = document.getElementById('produtoModal');
 const produtoModal = produtoModalEl && window.bootstrap
     ? bootstrap.Modal.getOrCreateInstance(produtoModalEl)
     : null;
+let fotoSelecionada = null;
 
 const STATUS_LABEL = {
     novo: 'Novo',
@@ -335,6 +337,21 @@ async function excluirProduto(id = null) {
         mostrarResultado(`Erro ao excluir produto: ${erro.message}`, 'error');
     }
 }
+if (inputFoto) {
+    inputFoto.addEventListener('change', onSelecionarFoto);
+}
+function onSelecionarFoto(event) {
+    const arquivo = event.target.files && event.target.files[0];
+
+    if (!arquivo) {
+        fotoSelecionada = null;
+        // atualizarAvatar('');
+        return;
+    }
+
+    fotoSelecionada = arquivo;
+    // atualizarAvatar(URL.createObjectURL(arquivo));
+}
 
 async function criarProduto(event) {
     event.preventDefault();
@@ -345,31 +362,40 @@ async function criarProduto(event) {
     const data_fabricacao = inputData_fabricacao.value.trim();
     const quantidade = inputQuantidade.value.trim();
     const status = inputStatus.value;
+    const foto = fotoSelecionada;
 
+    const formData = new FormData();
+    formData.append('titulo',titulo);
+    formData.append('data_validade',data_validade);
+    formData.append('data_fabricacao',data_fabricacao);
+    formData.append('quantidade',quantidade);
+    formData.append('status',status);
+    formData.append('vencido',status === 'vencido');
+            
+    if (fotoSelecionada) formData.append('foto', fotoSelecionada);
     if (!titulo) return;
 
     try {
         if (modalMode === 'edit' && id) {
-            const payload = { titulo, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' };
             const resposta = await apiRequest(`/produtos/${id}`, {
                 method: 'PUT',
-                body: payload,
+                body: formData,
             });
 
             const index = produtos.findIndex((item) => String(item.id) === String(id));
-            if (index >= 0) {
-                produtos[index] = {
-                    ...produtos[index],
-                    ...payload,
-                    ...(typeof resposta === 'object' ? resposta : {}),
-                };
-            }
+            // if (index >= 0) {
+            //     produtos[index] = {
+            //         ...produtos[index],
+            //         ...payload,
+            //         ...(typeof resposta === 'object' ? resposta : {}),
+            //     };
+            // }
 
             mostrarResultado('Produto atualizado com sucesso.');
         } else {
             const nova = await apiRequest('/produtos', {
                 method: 'POST',
-                body: { titulo, data_validade, data_fabricacao, quantidade, status, vencido: status === 'vencido' },
+                body: formData,
             });
 
             if (nova && nova.id) {
