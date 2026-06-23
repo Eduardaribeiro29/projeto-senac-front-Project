@@ -137,8 +137,8 @@ function renderTabela() {
         linha.innerHTML = `
             <td>${produto.id}</td>
             <td>${produto.titulo}</td>
-            <td>${produto.data_validade || '-'}</td>
             <td>${produto.data_fabricacao || '-'}</td>
+            <td>${produto.data_validade || '-'}</td>
             <td>${produto.quantidade || '-'}</td>
             <td>${criarBadgeStatus(status)}</td>
             <td class="table-actions">
@@ -210,7 +210,7 @@ async function atualizarStatusApi(produto, novoStatus) {
     });
 }
 
-async function  moverProduto(id, novoStatus) {
+async function moverProduto(id, novoStatus) {
     const produto = produtos.find((item) => String(item.id) === String(id));
     if (!produto) return;
 
@@ -283,6 +283,10 @@ function aplicarModoModal() {
 
 function abrirNovoProduto() {
     produtoSelecionadoId = null;
+
+    if (inputFoto) {
+        inputFoto.value = '';
+    }
     modalMode = 'create';
     preencherModal({ id: '', titulo: '', data_validade: '', data_fabricacao: '', quantidade: '' });
     aplicarModoModal();
@@ -360,20 +364,51 @@ async function criarProduto(event) {
     const titulo = inputTitulo.value.trim();
     const data_validade = inputData_validade.value.trim();
     const data_fabricacao = inputData_fabricacao.value.trim();
-    const quantidade = inputQuantidade.value.trim();
+    const quantidade = Number(
+        inputQuantidade.value.trim()
+    );
     const status = inputStatus.value;
     const foto = fotoSelecionada;
 
     const formData = new FormData();
-    formData.append('titulo',titulo);
-    formData.append('data_validade',data_validade);
-    formData.append('data_fabricacao',data_fabricacao);
-    formData.append('quantidade',quantidade);
-    formData.append('status',status);
-    formData.append('vencido',status === 'vencido');
-            
+    formData.append('titulo', titulo);
+    formData.append('data_validade', data_validade);
+    formData.append('data_fabricacao', data_fabricacao);
+    formData.append('quantidade', quantidade);
+    formData.append('status', status);
+    formData.append('vencido', status === 'vencido');
+
+    if (
+        new Date(data_fabricacao) >
+        new Date(data_validade)
+    ) {
+        mostrarResultado(
+            'A data de fabricação não pode ser maior que a data de validade.',
+            'error'
+        );
+        return;
+    }
+
     if (fotoSelecionada) formData.append('foto', fotoSelecionada);
-    if (!titulo) return;
+    if (!titulo) {
+        mostrarResultado('Informe o título', 'error');
+        return;
+    }
+
+    if (!data_fabricacao) {
+        mostrarResultado('Informe a data de fabricação', 'error');
+        return;
+    }
+
+    if (!data_validade) {
+        mostrarResultado('Informe a data de validade', 'error');
+        return;
+    }
+
+    if (!quantidade) {
+        mostrarResultado('Informe a quantidade', 'error');
+        return;
+    };
 
     try {
         if (modalMode === 'edit' && id) {
@@ -382,14 +417,16 @@ async function criarProduto(event) {
                 body: formData,
             });
 
+            await carregarProdutos();
+
             const index = produtos.findIndex((item) => String(item.id) === String(id));
-            // if (index >= 0) {
-            //     produtos[index] = {
-            //         ...produtos[index],
-            //         ...payload,
-            //         ...(typeof resposta === 'object' ? resposta : {}),
-            //     };
-            // }
+            if (index >= 0) {
+                produtos[index] = {
+                    ...produtos[index],
+                    ...payload,
+                    ...(typeof resposta === 'object' ? resposta : {}),
+                };
+            }
 
             mostrarResultado('Produto atualizado com sucesso.');
         } else {
@@ -410,6 +447,7 @@ async function criarProduto(event) {
         renderTudo();
         if (produtoModal) produtoModal.hide();
         formProduto.reset();
+        fotoSelecionada = null;
         inputStatus.value = 'novo';
         modalMode = 'create';
         produtoSelecionadoId = null;

@@ -76,7 +76,9 @@ function setupValidation(form) {
 async function apiRequest(path, options = {}) {
     const token = getToken();
     const isFormData = options.body instanceof FormData;
-    const headers = {};
+    const headers = {
+        ...(options.headers || {})
+    };
 
     if (!isFormData) {
         headers['Content-Type'] = 'application/json';
@@ -86,14 +88,23 @@ async function apiRequest(path, options = {}) {
         headers.Authorization = `Bearer ${token}`;
     }
 
+    if (resposta.status === 401) {
+        logout();
+    }
+
     const resposta = await fetch(`${API_BASE}${path}`, {
-        method: options.method || 'PUT',
+        method: options.method || 'GET',
         headers,
         body: options.body
             ? (isFormData ? options.body : JSON.stringify(options.body))
             : undefined,
     });
 
+    if (resposta.status === 401) {
+        logout();
+        throw new Error('Sessão expirada. Faça login novamente.');
+    }
+    
     const textoResposta = await resposta.text();
     let dados;
 
