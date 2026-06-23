@@ -87,7 +87,7 @@ async function apiRequest(path, options = {}) {
     }
 
     const resposta = await fetch(`${API_BASE}${path}`, {
-        method: options.method || 'GET',
+        method: options.method || 'PUT',
         headers,
         body: options.body
             ? (isFormData ? options.body : JSON.stringify(options.body))
